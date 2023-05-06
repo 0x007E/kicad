@@ -1,0 +1,16 @@
+kibot:
+  version: 1
+
+preflight:
+  run_erc: true
+  run_drc: false
+  check_zone_fills: true
+  ignore_unconnected: false
+
+global:
+  output: "%f-%i.%x"
+
+import:
+  - run/schematic.kibot.yaml
+  - run/pcb.kibot.yaml
+  - run/gerber.kibot.yaml

@@ -1,0 +1,48 @@
+kibot:
+  version: 1
+  
+outputs:
+  - name: "print_front"
+    comment: "PDF - front copper and user drawings"
+    type: pdf_pcb_print
+    dir: "doc/pdf"
+    layers:
+      - layer: F.Cu
+      - layer: Dwgs.User
+
+  - name: "print_bottom"
+    comment: "PDF - back copper and user drawings"
+    type: pdf_pcb_print
+    dir: "doc/pdf"
+    layers:
+      - layer: B.Cu
+      - layer: Dwgs.User
+
+  - name: pcb_top
+    comment: "Renders - top"
+    type: pcbdraw
+    dir: "doc/image"
+    options:
+      output: "%f-%i.%x"
+      format: jpg
+      show_components: none
+      dpi: 600
+
+  - name: pcb_bot
+    comment: "Renders - bottom"
+    type: pcbdraw
+    dir: "doc/image"
+    options:
+      output: "%f-%i.%x"
+      format: jpg
+      bottom: True
+      show_components: none
+      dpi: 600
+
+  - name: step
+    comment: "Renders - 3D model (STEP)"
+    type: step
+    dir: "doc/"
+    options:
+      metric_units: true
+      origin: 85,66.2
