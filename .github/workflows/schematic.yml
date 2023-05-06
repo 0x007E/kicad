@@ -21,7 +21,7 @@ jobs:
       # Set this to the version to include in the schematic and PCB. Since this
       # script runs outside of the release process it can't pull a version
       # number automatically from GitHub.
-      Version: nightly
+      Version: "nightly"
     runs-on: ubuntu-latest
 
     # These are all the steps that generate the files.
@@ -38,13 +38,13 @@ jobs:
         with:
           include: "*.kicad_sch"
           find: "%%version%%"
-          replace: ${{ github.event.inputs.version.default }}
+          replace: ${{ env.Version }}
 
       - name: Set schematic date
         uses: jacobtomlinson/gha-find-replace@v3
         with:
           include: "*.kicad_sch"
-          find: "%%date%%"
+          find: "%%current_date%%"
           replace: ${{ env.CURRENT_DATE }}
 
       - name: Set schematic title
