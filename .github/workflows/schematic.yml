@@ -36,42 +36,42 @@ jobs:
       - name: Set schematic version
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          include: ".*.sch"
+          include: ".*.kicad_sch"
           find: "%%revision%%"
           replace: ${{ github.event.inputs.version }}
 
       - name: Set schematic date
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          include: ".*.sch"
+          include: ".*.kicad_sch"
           find: "%%date%%"
           replace: ${{ env.CURRENT_DATE }}
 
       - name: Set schematic title
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          include: ".*.sch"
+          include: ".*.kicad_sch"
           find: "%%title%%"
           replace: ${{ github.event.repository.name }}
       
       - name: Set schematic author
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          include: ".*.sch"
+          include: ".*.kicad_sch"
           find: "%%author%%"
           replace: "G.Raf"
 
       - name: Set schematic website
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          include: ".*.sch"
+          include: ".*.kicad_sch"
           find: "%%website%%"
           replace: "www.sunriax.at"
 
       - name: Set schematic company
         uses: jacobtomlinson/gha-find-replace@master
         with:
-          include: ".*.sch"
+          include: ".*.kicad_sch"
           find: "%%company%%"
           replace: "g.raf^engineering"
 
