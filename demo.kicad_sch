@@ -6,8 +6,8 @@
 
   (title_block
     (title "%%title%%")
-    (date "%%date%%")
-    (rev "%%revision%%")
+    (date "%%current_date%%")
+    (rev "%%version%%")
     (company "%%company%%")
     (comment 1 "%%website%%")
     (comment 2 "%%author%%")

@@ -6,7 +6,7 @@ on:
       version:
         description: "Design version"
         required: true
-        default: "nightly"
+        default: "0.x"
 
 jobs:
   Documentation:
@@ -37,8 +37,8 @@ jobs:
         uses: jacobtomlinson/gha-find-replace@v3
         with:
           include: "*.kicad_sch"
-          find: "%%revision%%"
-          replace: ${{ github.event.inputs.version }}
+          find: "%%version%%"
+          replace: ${{ github.event.inputs.version.default }}
 
       - name: Set schematic date
         uses: jacobtomlinson/gha-find-replace@v3
@@ -73,7 +73,7 @@ jobs:
         with:
           include: "*.kicad_sch"
           find: "%%company%%"
-          replace: "g.raf^engineering"
+          replace: "g.raf engineering"
 
       # Actually run KiBot to generate all the files. The KiBot script used is
       # in the .kibot/release.kibot.yaml folder.
