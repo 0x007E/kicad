@@ -31,7 +31,7 @@ jobs:
 
       - name: Get current date and time
         id: date
-        run: echo "{date}={$(date +'%Y-%m-%d')}" >> $GITHUB_OUTPUT
+        run: echo "CURRENT_DATE=$(date +%Y%m%d)" >> $GITHUB_ENV
 
       - name: Set schematic version
         uses: jacobtomlinson/gha-find-replace@master
@@ -45,7 +45,7 @@ jobs:
         with:
           include: ".*.sch"
           find: "%%date%%"
-          replace: ${{ steps.date.outputs.date }}
+          replace: ${{ env.CURRENT_DATE }}
 
       - name: Set schematic title
         uses: jacobtomlinson/gha-find-replace@master
