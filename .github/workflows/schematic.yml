@@ -31,7 +31,7 @@ jobs:
 
       - name: Get current date and time
         id: date
-        run: echo "CURRENT_DATE=$(date +%Y-%m-%d)" >> $GITHUB_ENV
+        run: echo "CURRENT_DATE=$(TZ='${{ env.Timezone }}' date +'%Y-%m-%d %T')" >> $GITHUB_ENV
 
       - name: Set schematic version
         uses: jacobtomlinson/gha-find-replace@master
