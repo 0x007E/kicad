@@ -1,9 +1,6 @@
 name: "KiBot - Generate Schematic Outputs"
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       version:
@@ -32,25 +29,17 @@ jobs:
       # Check out the files
       - uses: actions/checkout@v2
 
-      # Get the current date and time, in the timezone specified above, for use later.
       - name: Get current date and time
         id: date
-        run: echo "::set-output name=date::$(TZ='${{ env.Timezone }}' date +'%Y-%m-%d %T')"
+        run: echo "{date}={date_only::$(TZ='${{ env.Timezone }}' date +'%Y-%m-%d')}" >> $GITHUB_OUTPUT
 
-      # Get the current date
-      - name: Get current date
-        id: date_only
-        run: echo "::set-output name=date_only::$(TZ='${{ env.Timezone }}' date +'%Y-%m-%d')"
-
-      # Do a string replacement in the schematic file to set the version and date.
-      # Any instance of %%version%% in the schematic gets replaced with the release version.
-      # Any instance of %%date%% in the schematic gets replaced with the release date and time.
       - name: Set schematic version
         uses: jacobtomlinson/gha-find-replace@master
         with:
           include: ".*.sch"
-          find: "%%version%%"
+          find: "%%revision%%"
           replace: ${{ github.event.inputs.version }}
+          regex: false
 
       - name: Set schematic date
         uses: jacobtomlinson/gha-find-replace@master
@@ -58,6 +47,7 @@ jobs:
           include: ".*.sch"
           find: "%%date%%"
           replace: ${{ steps.date.outputs.date }}
+          regex: false
 
       - name: Set schematic title
         uses: jacobtomlinson/gha-find-replace@master
@@ -65,13 +55,15 @@ jobs:
           include: ".*.sch"
           find: "%%title%%"
           replace: ${{ github.event.repository.name }}
+          regex: false
 
       - name: Set schematic author
         uses: jacobtomlinson/gha-find-replace@master
         with:
           include: ".*.sch"
-          find: "%%title%%"
-          replace: "GAR"
+          find: "%%author%%"
+          replace: "G.Raf"
+          regex: false
 
       - name: Set schematic website
         uses: jacobtomlinson/gha-find-replace@master
@@ -79,13 +71,15 @@ jobs:
           include: ".*.sch"
           find: "%%website%%"
           replace: "www.sunriax.at"
+          regex: false
 
       - name: Set schematic company
         uses: jacobtomlinson/gha-find-replace@master
         with:
           include: ".*.sch"
           find: "%%company%%"
-          replace: ${{ github.event.repository.name }}
+          replace: "g.raf^engineering"
+          regex: false
 
       # Actually run KiBot to generate all the files. The KiBot script used is
       # in the .kibot/release.kibot.yaml folder.
