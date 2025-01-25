@@ -16,7 +16,7 @@ The `demo` project is based on a pcb with two transistors (`BC547`).
 | Schematic | [pdf](https://github.com/0x007E/kicad/releases/latest/download/schematic.pdf) / [cadlab](https://cadlab.io/project/28586/main/files)     | Schematic files          |
 | Board     | [pdf](https://github.com/0x007E/kicad/releases/latest/download/pcb.pdf) / [cadlab](https://cadlab.io/project/28586/main/files)     | Board file               |
 | Drill     | [pdf](https://github.com/0x007E/kicad/releases/latest/download/drill.pdf) | Drill file               |
-| Gerber    | [zip](https://github.com/0x007E/kicad/releases/latest/download/kicad.zip) / [tar](https://github.com/0x007E/kicad/releases/latest/download/kicad.tar.gz)                | Gerber/Drill files       |
+| PCB    | [zip](https://github.com/0x007E/kicad/releases/latest/download/kicad.zip) / [tar](https://github.com/0x007E/kicad/releases/latest/download/kicad.tar.gz)                | KiCAD/Gerber/BoM/Drill files       |
 
 ## PCB
 
