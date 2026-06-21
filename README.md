@@ -16,7 +16,8 @@ The `demo` project is based on a pcb with two transistors (`BC547`).
 | Schematic | [pdf](https://github.com/0x007E/kicad/releases/latest/download/schematic.pdf) / [cadlab](https://cadlab.io/project/28586/main/files)     | Schematic files          |
 | Board     | [pdf](https://github.com/0x007E/kicad/releases/latest/download/pcb.pdf) / [cadlab](https://cadlab.io/project/28586/main/files)     | Board file               |
 | Drill     | [pdf](https://github.com/0x007E/kicad/releases/latest/download/drill.pdf) | Drill file               |
-| PCB    | [zip](https://github.com/0x007E/kicad/releases/latest/download/kicad.zip) / [tar](https://github.com/0x007E/kicad/releases/latest/download/kicad.tar.gz)                | KiCAD/Gerber/BoM/Drill files       |
+| BoM | [xlsx](https://github.com/0x007E/kicad/releases/latest/download/bom.xlsx) / [html](https://github.com/0x007E/kicad/releases/latest/download/bom.html)          | Bill of Material as Excel/interactive HTML |
+| PCB    | [zip](https://github.com/0x007E/kicad/releases/latest/download/kicad.zip) / [tar](https://github.com/0x007E/kicad/releases/latest/download/kicad.tar.gz)    | KiCAD/Gerber/BoM/Drill files       |
 
 ## PCB
 
@@ -38,7 +39,7 @@ The circuit board is populated on one side (Top). The best way for soldering is 
 
 ---
 
-> IMPORTANT: Third party devices (e.g. switches, batteries, ...) in layout are mostly imported from [GrabCAD](https://grabcad.com/dashboard).
+> IMPORTANT: Third party devices (e.g. switches, batteries, ...) in layout are mostly imported from [GrabCAD](https://grabcad.com/dashboard), [SnapMagic](https://www.snapeda.com/) or [Component Search Engine](https://componentsearchengine.com/).
 
 ---
 
