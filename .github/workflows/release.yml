@@ -1,4 +1,4 @@
-name: Demo Release Pipeline
+name: DEMO Release Pipeline
 
 on:
   push:
@@ -12,7 +12,7 @@ jobs:
       Folder: "./pcb"
       SchematicFileExtension: "kicad_sch"
       PCBFileExtension: "kicad_pcb"
-      OutputFolder: "output"
+      OutputFolder: "./output"
       ConfigFilePath: ".kibot/release.kibot.yaml"
     runs-on: ubuntu-latest
     steps:
@@ -25,31 +25,23 @@ jobs:
         cp -r ${{ env.Folder }} ${{ env.OutputFolder }}/kicad
         cp ./LICENSE ${{ env.OutputFolder }}
 
-    - name: Copy License
-      run: |
-          mkdir -p ${{ env.OutputFolder }}
-          cp ./LICENSE ${{ env.OutputFolder }}
-    
     - name: Run KiBOT
-      uses: INTI-CMNB/KiBot@v2_dk7
+      uses: INTI-CMNB/KiBot@v2_k9
       with:
         config: ${{ env.ConfigFilePath }}
         dir: ${{ env.OutputFolder }}
         schema: "${{ env.Folder }}/${{ env.BaseFileName }}.${{ env.SchematicFileExtension }}"
         board: "${{ env.Folder }}/${{ env.BaseFileName }}.${{ env.PCBFileExtension }}"
-    
+
     - name: Archive artifacts
       uses: actions/upload-artifact@v4
       with:
         name: kicad-export
         path: ${{ env.OutputFolder }}
         retention-days: 1
-
+  
   create-release:
     needs: [export-kicad]
-    env:
-      KiCADBaseFileName: "demo"
-      Folder: "./artifact"
     runs-on: ubuntu-latest
     steps:
     - name: Create Release
@@ -65,16 +57,21 @@ jobs:
         draft: false
         prerelease: false
 
+    - name: Install ImageMagick
+      run: |
+          sudo apt-get update
+          sudo apt-get install -y imagemagick
+
     - name: Download KiCad Artifacts
       uses: actions/download-artifact@v4
       with:
         name: kicad-export
-        path: ${{ env.Folder }}/kicad
+        path: ./artifact/kicad
     - name: Display structure
-      run: ls -R ./${{ env.Folder }}/kicad
+      run: ls -R ./artifact/kicad
     - name: Create Compressed File
       run: |
-        cd ${{ env.Folder }}
+        cd ./artifact
         tar -czvf ./kicad.tar.gz ./kicad
         zip -r ./kicad.zip ./kicad
         cd ..
@@ -85,7 +82,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ env.Folder }}/kicad/schematic/${{ env.KiCADBaseFileName }}-schematic.pdf
+        asset_path: ./artifact/kicad/schematic/demo-schematic.pdf
         asset_name: schematic.pdf
         asset_content_type: application/pdf
 
@@ -95,7 +92,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ env.Folder }}/kicad/pcb/PCB.pdf
+        asset_path: ./artifact/kicad/pcb/PCB.pdf
         asset_name: pcb.pdf
         asset_content_type: application/pdf
 
@@ -105,8 +102,23 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ env.Folder }}/kicad/blender/top.png
+        asset_path: ./artifact/kicad/blender/top.png
         asset_name: top.kicad.png
+        asset_content_type: image/png
+    
+    - name: Prepare KiCAD TOP Render Thumbnail
+      run: |
+        mkdir -p thumbnails
+        convert ./artifact/kicad/blender/top.png -resize 200x ./thumbnails/top.thumbnail.png
+
+    - name: Upload KiCAD TOP Render Thumbnail
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./thumbnails/top.thumbnail.png
+        asset_name: top.thumbnail.kicad.png
         asset_content_type: image/png
 
     - name: Upload KiCAD BOTTOM Render
@@ -115,7 +127,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ env.Folder }}/kicad/blender/bottom.png
+        asset_path: ./artifact/kicad/blender/bottom.png
         asset_name: bottom.kicad.png
         asset_content_type: image/png
 
@@ -125,9 +137,29 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ env.Folder }}/kicad/drill/${{ env.KiCADBaseFileName }}-drill_map.pdf
+        asset_path: ./artifact/kicad/drill/demo-drill_map.pdf
         asset_name: drill.pdf
         asset_content_type: application/pdf
+    
+    - name: Upload KiCAD BOM
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifact/kicad/bom/demo-bom.xlsx
+        asset_name: bom.xlsx
+        asset_content_type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
+    
+    - name: Upload KiCAD iBOM
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./artifact/kicad/ibom/IBOM.html
+        asset_name: bom.html
+        asset_content_type: text/html
 
     - name: Upload KiCAD Asset
       uses: actions/upload-release-asset@v1
@@ -135,7 +167,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ env.Folder }}/kicad.tar.gz
+        asset_path: ./artifact/kicad.tar.gz
         asset_name: kicad.tar.gz
         asset_content_type: application/gzip
 
@@ -145,6 +177,6 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ${{ env.Folder }}/kicad.zip
+        asset_path: ./artifact/kicad.zip
         asset_name: kicad.zip
         asset_content_type: application/zip
